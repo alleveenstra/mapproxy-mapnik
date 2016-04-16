@@ -1,0 +1,44 @@
+services:
+  demo:
+  kml:
+  tms:
+  wms:
+    # srs: ['EPSG:4326', 'EPSG:900913']
+    # image_formats: ['image/jpeg', 'image/png']
+    md:
+      # metadata used in capabilities documents
+      title: MapProxy WMS Proxy
+      abstract: This is the fantastic MapProxy.
+      online_resource: http://mapproxy.org/
+
+layers:
+  - name: my_layer
+    title: WMS layer from tiles
+    sources: [mycache]
+
+caches:
+  mycache:
+    grids: [tile_grid_of_source]
+    sources: [my_tile_source]
+
+sources:
+  my_tile_source:
+    type: tile
+    grid: tile_grid_of_source
+    url: http://127.0.0.1/osm_tiles/%(z)s/%(x)s/%(y)s.png
+
+grids:
+  tile_grid_of_source:
+    base: GLOBAL_MERCATOR
+    origin: nw
+
+globals:
+  cache:
+    base_dir: './cache_data'
+    lock_dir: './cache_data/locks'
+
+  image:
+      resampling_method: bicubic
+      # resampling_method: bilinear
+      # resampling_method: bicubic
+
