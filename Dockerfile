@@ -22,6 +22,7 @@ RUN a2enmod wsgi
 RUN a2dissite 000*
 ADD tileserver.conf /etc/apache2/sites-available/tileserver.conf
 RUN a2ensite tileserver.conf
+RUN a2enmod rewrite
 
 # Configure supervisord
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/log/supervisor
