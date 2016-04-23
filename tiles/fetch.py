@@ -24,7 +24,7 @@ right_y = 54.158682
 
 # Zoomlevels
 zoom_min = 0
-zoom_max = 16
+zoom_max = 8
 
 for zoom in range(zoom_min, zoom_max + 1):
     num_tiles = 2 ** zoom
