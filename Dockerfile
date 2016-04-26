@@ -12,21 +12,6 @@ RUN apt-get update -y && \
 
 RUN pip install Shapely Pillow MapProxy uwsgi webcolors
 
-# RUN apt-get install -y supervisor wget libharfbuzz-dev cmake software-properties-common python-software-properties libboost-dev libboost-filesystem-dev libboost-program-options-dev libboost-python-dev libboost-regex-dev libboost-system-dev libboost-thread-dev subversion git-core tar unzip bzip2 build-essential autoconf libtool libxml2-dev libgeos-dev libpq-dev libbz2-dev munin-node munin libprotobuf-c0-dev protobuf-c-compiler libfreetype6-dev libpng12-dev libtiff4-dev libicu-dev libgdal-dev libcairo-dev libcairomm-1.0-dev apache2 apache2-dev libapache2-mod-wsgi libagg-dev liblua5.2-dev ttf-unifont autoconf apache2-dev libtool libxml2-dev libbz2-dev libgeos-dev libgeos++-dev libproj-dev gdal-bin libgdal1-dev mapnik-utils python-mapnik libmapnik-dev python-imaging python-yaml libproj0 libgeos-dev python-lxml libgdal-dev build-essential python-dev libjpeg-dev zlib1g-dev libfreetype6-dev python-virtualenv
-# RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test;
-# RUN add-apt-repository "deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main";
-# RUN wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
-# RUN apt-get update -y
-# RUN apt-get install -y clang-3.6
-
-# Install the Mapnik library
-# RUN cd /tmp && git clone https://github.com/mapnik/mapnik.git
-# RUN cd /tmp/mapnik && git checkout v3.0.8 && git submodule update --init
-# RUN cd /tmp/mapnik && ./configure CXX=clang++-3.6 CC=clang-3.6 && make
-
-# Verify that Mapnik has been installed correctly
-# RUN python -c 'import mapnik'
-
 # Install mod_tile and renderd
 RUN cd /tmp && git clone https://github.com/openstreetmap/mod_tile.git && \
     cd /tmp/mod_tile && \
@@ -109,6 +94,9 @@ COPY layer-shapefiles.xml.inc /usr/local/src/mapnik-style/inc/layer-shapefiles.x
 # Configure supervisord
 RUN mkdir -p /var/lock/apache2 /var/run/apache2 /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+VOLUME /var/lib/mod_tile
+VOLUME /usr/local/mapproxy/cache_data
 
 # Expose the webserver
 EXPOSE 80
