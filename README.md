@@ -1,6 +1,6 @@
 # Docker container with Mapproxy and Mapnik on apache2
 
-This container run Apache 2 with Mapproxy and Mod_tile configured to working together. It requires a PostgreSQL database
+This container runs Apache 2 with Mapproxy and Mod_tile configured to working together. It requires a PostgreSQL database
 setup with openstreetmap data, the username "gis" and in a database named "gis". Tiles are rendered in gray tones, so
 they are suitable for usage as background maps.
 
