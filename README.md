@@ -39,6 +39,7 @@ You should look this up using: "ifconfig docker0".
 
 ```sh
 host gis gis 172.17.0.1/24 trust
+host gis gis 127.0.0.1/24 trust
 ```
 
 Add the following to "/etc/postgresql/9.3/main/postgresql.conf" and restart PostgreSQL using "service postgresql restart".
@@ -62,8 +63,8 @@ sudo -u postgres createdb gis
 Add the postgis extensions to database gis.
 
 ```sh
-echo "create extension postgis" | psql -u gis -h 127.0.0.1
-echo "create extension postgis_topography" | psql -u gis -h 127.0.0.1
+echo "create extension postgis" | psql --host 127.0.0.1 gis gis
+echo "create extension postgis_topology" | psql --host 127.0.0.1 gis gis
 ```
 
 Download the openstreetmap data.
