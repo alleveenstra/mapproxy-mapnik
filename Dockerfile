@@ -68,6 +68,7 @@ RUN chmod a+rwx /usr/local/mapproxy/cache_data
 ADD mapproxy-mapnik.yaml /usr/local/mapproxy/mapproxy-mapnik.yaml
 ADD config.py /usr/local/mapproxy/config.py
 RUN a2enmod wsgi
+RUN a2enmod rewrite
 RUN a2dissite 000*
 ADD tileserver.conf /etc/apache2/sites-available/tileserver.conf
 RUN a2ensite tileserver.conf

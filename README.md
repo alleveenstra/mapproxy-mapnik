@@ -25,7 +25,7 @@ docker run --add-host=database:192.168.0.1 -p 80:80 alleveenstra/mapproxy-mapnik
 
 # Setting up a database
 
-This guide shows you how to setup a PostgreSQL 9.3 database for usage with this container on Ubuntu 14.04.
+This guide shows you how to setup a PostgreSQL database for usage with this container.
 
 The first set is to install the required packages.
 
@@ -33,7 +33,18 @@ The first set is to install the required packages.
 sudo apt-get install postgresql postgresql-contrib postgis wget docker.io osm2pgsql
 ```
 
-Add the following to line to "/etc/postgresql/9.3/main/pg_hba.conf".
+```sh
+sudo yum install epel-release
+sudo yum install postgresql postgresql-server postgis docker boost -y
+```
+
+For CentOS fetch a osm2pgsql from https://www.rpmfind.net/linux/rpm2html/search.php?query=postgis and install it with:
+
+```sh
+rpm -i filename.rpm
+```
+
+Add the following to line to "/etc/postgresql/9.3/main/pg_hba.conf" on Ubuntu or "/var/lib/pgsql/data/pg_hba.conf" on CentOS.
 The IP range (172.17.0.1/24) should reflect your docker adapter range.
 You should look this up using: "ifconfig docker0".
 
@@ -42,7 +53,8 @@ host gis gis 172.17.0.1/24 trust
 host gis gis 127.0.0.1/24 trust
 ```
 
-Add the following to "/etc/postgresql/9.3/main/postgresql.conf" and restart PostgreSQL using "service postgresql restart".
+Add the following to "/etc/postgresql/9.3/main/postgresql.conf" or "/var/lib/pgsql/data/postgresql.conf" on CentOS.
+Restart PostgreSQL using "service postgresql restart".
 
 ```sh
 listen_addresses = '*'
@@ -77,7 +89,7 @@ Import the openstreetmap data into the database.
 Note that osm2pgsql has options to speed up an import.
 
 ```sh
-osm2pgsql --slim --database gis --user gis netherlands-latest.osm.pbf
+osm2pgsql --slim --database gis --user gis --host 127.0.0.1 netherlands-latest.osm.pbf
 ```
 
 Create local directories for the caches.
@@ -100,4 +112,10 @@ docker run --add-host=database:172.17.42.1 \
            -v /data/mod_tile:/var/lib/mod_tile \
            -v /data/cache_data:/usr/local/mapproxy/cache_data \
            -p 80:80 -d alleveenstra/mapproxy-mapnik
+```
+
+When you experience error with the mount points, you might want to disabled selinux:
+
+```sh
+su -c "setenforce 0"
 ```
